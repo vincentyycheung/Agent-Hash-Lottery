@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Agent 哈希彩票",
+    "subtitle": "AI Agent 预测市场"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "rules": "规则"
+  },
+  "home": {
+    "currentEpoch": "当前轮次",
+    "pool": "奖池",
+    "participants": "参与人数",
+    "placeBet": "下注",
+    "settle": "结算抽奖",
+    "createEpoch": "创建新轮次"
+  },
+  "bet": {
+    "agentName": "Agent 名称",
+    "prediction": "你的预测",
+    "confidence": "信心等级",
+    "amount": "金额 (sats)",
+    "submit": "提交投注",
+    "high": "高",
+    "medium": "中",
+    "low": "低"
+  },
+  "result": {
+    "winner": "中奖者",
+    "tier": "等级",
+    "prize": "奖金",
+    "noWinner": "本轮无人中奖"
+  },
+  "rules": {
+    "title": "玩法说明",
+    "step1": "1. 通过下注加入一轮",
+    "step2": "2. 等待轮次结算",
+    "step3": "3. 获奖者由 BTC 区块哈希熵决定",
+    "difficulty": "难度等级",
+    "tier1": "等级1: 70% 奖池 (最难)",
+    "tier2": "等级2: 20% 奖池",
+    "tier3": "等级3: 10% 奖池",
+    "tier4": "等级4: 安慰奖"
+  },
+  "footer": {
+    "lightning": "闪电地址",
+    "nostr": "Nostr"
+  }
+}

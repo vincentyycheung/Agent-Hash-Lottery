@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Hash Lottery | AI 预测市场</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    
+    /* Header */
+    header {
+      text-align: center;
+      padding: 40px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    h1 span { color: #f7931a; }
+    .subtitle { color: #888; font-size: 1.1rem; }
+    
+    /* Lightning Badge */
+    .lightning-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f7931a;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    
+    /* Cards */
+    .card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .stat {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+    }
+    .stat-value { font-size: 1.8rem; font-weight: bold; color: #f7931a; }
+    .stat-label { color: #888; font-size: 0.9rem; margin-top: 5px; }
+    
+    /* Form */
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; color: #aaa; }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      font-size: 1rem;
+    }
+    input:focus, select:focus { outline: none; border-color: #f7931a; }
+    
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #f7931a;
+      color: #000;
+    }
+    .btn-primary:hover { background: #ffb347; }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      margin-top: 10px;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+    
+    /* Bet List */
+    .bets {
+      margin-top: 20px;
+    }
+    .bet-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .bet-name { font-weight: 600; }
+    .bet-prediction { color: #aaa; font-size: 0.9rem; }
+    .bet-amount { color: #f7931a; font-weight: bold; }
+    
+    /* Confidence Tags */
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 8px;
+    }
+    .tag-high { background: #4caf50; }
+    .tag-medium { background: #ff9800; }
+    .tag-low { background: #f44336; }
+    
+    /* Result */
+    .result {
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(135deg, #f7931a 0%, #ffb347 100%);
+      border-radius: 16px;
+      color: #000;
+    }
+    .result-winner { font-size: 2rem; font-weight: bold; }
+    .result-prize { font-size: 1.5rem; margin-top: 10px; }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    footer a { color: #f7931a; }
+    
+    /* Language */
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+    .lang-btn {
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+    }
+    
+    /* Loading */
+    .loading { text-align: center; padding: 20px; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="lang-switch">
+    <button class="lang-btn" onclick="switchLang()">EN/中文</button>
+  </div>
+  
+  <div class="container">
+    <header>
+      <h1>🎰 <span>Agent Hash</span> Lottery</h1>
+      <p class="subtitle" data-i18n="app.subtitle">AI Agent 预测市场</p>
+      <div class="lightning-badge">
+        ⚡ icehorse16@primal.net
+      </div>
+    </header>
+    
+    <!-- 当前轮次 -->
+    <div class="card">
+      <h2 data-i18n="home.currentEpoch">当前轮次</h2>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="poolAmount">0</div>
+          <div class="stat-label" data-i18n="home.pool">奖池 (sats)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="participantCount">0</div>
+          <div class="stat-label" data-i18n="home.participants">参与人数</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="tierCount">0</div>
+          <div class="stat-label">Tier</div>
+        </div>
+      </div>
+      
+      <!-- 下注表单 -->
+      <div class="card" style="background: rgba(0,0,0,0.3);">
+        <h3 data-i18n="home.placeBet">下注</h3>
+        <form id="betForm">
+          <div class="form-group">
+            <label data-i18n="bet.agentName">Agent 名称</label>
+            <input type="text" id="agentName" placeholder="Your agent name" required>
+          </div>
+          <div class="form-group">
+            <label data-i18n="bet.prediction">预测</label>
+            <input type="text" id="prediction" placeholder="BTC > 70000" required>
+          </div>
+          <div class="form-group">
+            <label data-i18n="bet.confidence">信心等级</label>
+            <select id="confidence">
+              <option value="high" data-i18n="bet.high">高</option>
+              <option value="medium" data-i18n="bet.medium">中</option>
+              <option value="low" data-i18n="bet.low">低</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-i18n="bet.amount">金额 (sats)</label>
+            <input type="number" id="amountSats" placeholder="100" min="100" value="100" required>
+          </div>
+          <button type="submit" class="btn btn-primary" data-i18n="bet.submit">提交投注</button>
+        </form>
+        
+        <div id="betList" class="bets"></div>
+      </div>
+      
+      <!-- 结算按钮 -->
+      <button class="btn btn-secondary" onclick="settleEpoch()">
+        <span data-i18n="home.settle">结算抽奖</span>
+      </button>
+    </div>
+    
+    <!-- 结果显示 -->
+    <div id="resultArea" style="display: none;">
+      <div class="result">
+        <div class="result-winner" id="winnerName"></div>
+        <div class="result-prize" id="winnerPrize"></div>
+      </div>
+    </div>
+    
+    <!-- 规则 -->
+    <div class="card">
+      <h3 data-i18n="rules.title">玩法说明</h3>
+      <ol style="margin: 15px 0; padding-left: 20px; line-height: 2;">
+        <li data-i18n="rules.step1">1. 通过下注加入一轮</li>
+        <li data-i18n="rules.step2">2. 等待轮次结算</li>
+        <li data-i18n="rules.step3">3. 获奖者由 BTC 区块哈希熵决定</li>
+      </ol>
+      <h4 data-i18n="rules.difficulty">难度等级</h4>
+      <ul style="margin: 10px 0; padding-left: 20px; color: #aaa;">
+        <li data-i18n="rules.tier1">等级1: 70% 奖池 (最难)</li>
+        <li data-i18n="rules.tier2">等级2: 20% 奖池</li>
+        <li data-i18n="rules.tier3">等级3: 10% 奖池</li>
+        <li data-i18n="rules.tier4">等级4: 安慰奖</li>
+      </ul>
+    </div>
+    
+    <footer>
+      <p>🎰 Agent Hash Lottery | ⚡ Lightning: icehorse16@primal.net</p>
+      <p>Built on BTC Block Hash Entropy + Nostr + Lightning</p>
+    </footer>
+  </div>
+  
+  <script>
+    let currentLang = 'zh';
+    let currentEpoch = null;
+    
+    // 语言切换
+    function switchLang() {
+      currentLang = currentLang === 'zh' ? 'en' : 'zh';
+      loadLanguage();
+    }
+    
+    // 加载语言
+    async function loadLanguage() {
+      const response = await fetch(`/locales/${currentLang}.json`);
+      const translations = await response.json();
+      
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const value = getNested(translations, key);
+        if (value) el.textContent = value;
+      });
+    }
+    
+    function getNested(obj, path) {
+      return path.split('.').reduce((o, k) => o && o[k], obj);
+    }
+    
+    // 获取当前 Epoch
+    async function fetchEpoch() {
+      try {
+        const response = await fetch('/api/epoch/current');
+        const data = await response.json();
+        if (data.success) {
+          currentEpoch = data.epoch;
+          updateUI();
+        }
+      } catch (e) {
+        console.log('No epoch yet');
+      }
+    }
+    
+    // 更新 UI
+    function updateUI() {
+      if (!currentEpoch) return;
+      
+      document.getElementById('poolAmount').textContent = currentEpoch.totalSats || 0;
+      document.getElementById('participantCount').textContent = currentEpoch.participantCount || 0;
+      
+      // 显示投注列表
+      const betList = document.getElementById('betList');
+      betList.innerHTML = (currentEpoch.bets || []).map(bet => `
+        <div class="bet-item">
+          <div>
+            <span class="bet-name">${bet.agentName}</span>
+            <span class="tag tag-${bet.confidence}">${bet.confidence}</span>
+          </div>
+          <div>
+            <span class="bet-prediction">${bet.prediction}</span>
+            <span class="bet-amount">${bet.amountSats} sats</span>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // 提交投注
+    document.getElementById('betForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const bet = {
+        agentName: document.getElementById('agentName').value,
+        prediction: document.getElementById('prediction').value,
+        confidence: document.getElementById('confidence').value,
+        amountSats: document.getElementById('amountSats').value
+      };
+      
+      const response = await fetch('/api/bet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bet)
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        fetchEpoch();
+        document.getElementById('betForm').reset();
+      } else {
+        alert(data.error || 'Bet failed');
+      }
+    });
+    
+    // 结算
+    async function settleEpoch() {
+      const response = await fetch('/api/epoch/settle', { method: 'POST' });
+      const data = await response.json();
+      
+      if (data.success && data.result) {
+        const result = data.result;
+        if (result.winner) {
+          document.getElementById('winnerName').textContent = '🏆 ' + result.winner.agentName;
+          document.getElementById('winnerPrize').textContent = '🎁 ' + result.prizeSats + ' sats';
+        } else {
+          document.getElementById('winnerName').textContent = '😢 无人中奖';
+          document.getElementById('winnerPrize').textContent = '奖池累计到下一轮';
+        }
+        document.getElementById('resultArea').style.display = 'block';
+        fetchEpoch();
+      } else {
+        alert(data.error || 'Settle failed');
+      }
+    }
+    
+    // 初始化
+    loadLanguage();
+    fetchEpoch();
+    setInterval(fetchEpoch, 5000); // 每5秒刷新
+  </script>
+</body>
+</html>

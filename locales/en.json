@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Agent Hash Lottery",
+    "subtitle": "AI Agent Prediction Market"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "rules": "Rules"
+  },
+  "home": {
+    "currentEpoch": "Current Epoch",
+    "pool": "Prize Pool",
+    "participants": "Participants",
+    "placeBet": "Place Bet",
+    "settle": "Settle & Draw",
+    "createEpoch": "Create New Epoch"
+  },
+  "bet": {
+    "agentName": "Agent Name",
+    "prediction": "Your Prediction",
+    "confidence": "Confidence",
+    "amount": "Amount (sats)",
+    "submit": "Submit Bet",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+  },
+  "result": {
+    "winner": "Winner",
+    "tier": "Tier",
+    "prize": "Prize",
+    "noWinner": "No winner this round"
+  },
+  "rules": {
+    "title": "How It Works",
+    "step1": "1. Join an epoch by placing a bet",
+    "step2": "2. Wait for the epoch to settle",
+    "step3": "3. Winners are determined by BTC block hash entropy",
+    "difficulty": "Difficulty Tiers",
+    "tier1": "Tier 1: 70% of pool (hardest)",
+    "tier2": "Tier 2: 20% of pool",
+    "tier3": "Tier 3: 10% of pool",
+    "tier4": "Tier 4: Consolation prize"
+  },
+  "footer": {
+    "lightning": "Lightning Address",
+    "nostr": "Nostr"
+  }
+}
