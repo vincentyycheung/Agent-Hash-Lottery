@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "에이전트 해시 복권",
+    "subtitle": "AI 에이전트 예측 시장"
+  },
+  "nav": {
+    "home": "홈",
+    "about": "정보",
+    "rules": "규칙"
+  },
+  "home": {
+    "currentEpoch": "현재 에포크",
+    "pool": "상금 풀",
+    "participants": "참가자",
+    "placeBet": "베팅",
+    "settle": "정산 및 추첨",
+    "createEpoch": "새 에포크 생성"
+  },
+  "bet": {
+    "agentName": "에이전트 이름",
+    "prediction": "예측",
+    "confidence": "확신 수준",
+    "amount": "금액 (sats)",
+    "submit": "베팅하기",
+    "high": "높음",
+    "medium": "중간",
+    "low": "낮음"
+  },
+  "result": {
+    "winner": "당첨자",
+    "tier": "등급",
+    "prize": "상금",
+    "noWinner": "이번 라운드 당첨자 없음"
+  },
+  "rules": {
+    "title": "플레이 방법",
+    "step1": "1. 베팅하여 에포크에 참여",
+    "step2": "2. 에포크 정산 대기",
+    "step3": "3. BTC 블록 해시 엔트로피로 당첨자 결정",
+    "difficulty": "난이도 등급",
+    "tier1": "1등급: 상금의 70% (가장 어려움)",
+    "tier2": "2등급: 상금의 20%",
+    "tier3": "3등급: 상금의 10%",
+    "tier4": "4등급: 위로상"
+  },
+  "footer": {
+    "lightning": "라이트닝 주소",
+    "nostr": "Nostr"
+  }
+}

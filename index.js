@@ -7,23 +7,36 @@
  * - 真实 BTC 区块哈希
  * - Nostr 广播
  * - Cashu/NWC 闪电支付
+ * - Polymarket 集成
+ * - 自动 Epoch 轮换
  */
 
 const CryptoJS = require("crypto-js");
 const { v4: uuidv4 } = require('uuid');
 const { finalizeEvent, getPublicKey, SimplePool } = require('nostr-tools');
+const https = require('https');
+const http = require('http');
 
 // ============= 配置 =============
 const CONFIG = {
   // Nostr 私钥 (hex)
-  NOSTR_PRIVATE_KEY: '76c70b80dad17392fe0368547f365c99e9b4b033cd51d6265f9550474ab1a0ff',
+  NOSTR_PRIVATE_KEY: process.env.NOSTR_PRIVATE_KEY || '76c70b80dad17392fe0368547f365c99e9b4b033cd51d6265f9550474ab1a0ff',
   NOSTR_RELAYS: ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.primal.net'],
   
   // Lightning Address (Cashu/NWC)
-  LIGHTNING_ADDRESS: 'icehorse16@primal.net',
+  LIGHTNING_ADDRESS: process.env.LIGHTNING_ADDRESS || 'icehorse16@primal.net',
   
   // BTC API
   BTC_API: 'https://blockstream.info/api',
+  
+  // Polymarket API
+  POLYMARKET_API: 'https://clob.polymarket.com',
+  
+  // 自动化设置
+  AUTO_EPOCH: {
+    ENABLED: process.env.AUTO_EPOCH === 'true',
+    INTERVAL_MINUTES: parseInt(process.env.EPOCH_INTERVAL || '5'),
+  },
   
   // 难度阈值
   DIFFICULTY: {
@@ -321,7 +334,114 @@ class AgentHashLottery {
   }
 }
 
-// ============= 运行 Demo =============
+/**
+ * Polymarket 集成
+ */
+class PolymarketIntegration {
+  constructor() {
+    this.baseUrl = 'https://clob.polymarket.com';
+  }
+
+  /**
+   * 获取热门预测市场
+   */
+  async getTrendingMarkets(limit = 10) {
+    try {
+      const response = await fetch(`${this.baseUrl}/markets?limit=${limit}&closed=false`);
+      const markets = await response.json();
+      
+      return markets.map(m => ({
+        id: m.conditionId,
+        question: m.question,
+        volume: m.volume || m.volume24hr,
+        odds: m.outcomes?.[0]?.price || 0.5,
+        endsAt: m.endDate,
+      }));
+    } catch (e) {
+      console.error('Polymarket API error:', e.message);
+      return [];
+    }
+  }
+
+  /**
+   * 获取特定市场详情
+   */
+  async getMarketDetails(conditionId) {
+    try {
+      const response = await fetch(`${this.baseUrl}/condition/${conditionId}`);
+      return await response.json();
+    } catch (e) {
+      console.error('Polymarket API error:', e.message);
+      return null;
+    }
+  }
+}
+
+/**
+ * 自动化 Epoch 管理器
+ */
+class AutoEpochManager {
+  constructor(ahl) {
+    this.ahl = ahl;
+    this.interval = CONFIG.AUTO_EPOCH.INTERVAL_MINUTES * 60 * 1000;
+    this.timer = null;
+  }
+
+  /**
+   * 启动自动轮换
+   */
+  start() {
+    if (!CONFIG.AUTO_EPOCH.ENABLED) {
+      console.log('⚠️ 自动 Epoch 已禁用');
+      return;
+    }
+
+    console.log(`🔄 自动 Epoch 已启动 (每 ${CONFIG.AUTO_EPOCH.INTERVAL_MINUTES} 分钟)`);
+    
+    this.timer = setInterval(async () => {
+      await this.cycleEpoch();
+    }, this.interval);
+  }
+
+  /**
+   * 停止自动轮换
+   */
+  stop() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+      console.log('⏹️ 自动 Epoch 已停止');
+    }
+  }
+
+  /**
+   * 轮换 Epoch
+   */
+  async cycleEpoch() {
+    try {
+      // 查找活动的 Epoch
+      for (const [id, epoch] of this.ahl.epochs) {
+        if (epoch.status === 'active' && epoch.bets.length > 0) {
+          console.log(`\n🔄 自动结算 Epoch: ${id.substring(0, 8)}...`);
+          
+          // 结算
+          const result = this.ahl.calculateWinner(id);
+          
+          // 结算完成后创建新 Epoch
+          const newEpoch = await this.ahl.createEpoch();
+          console.log(`🆕 新 Epoch: ${newEpoch.id.substring(0, 8)}...`);
+          
+          return result;
+        }
+      }
+    } catch (e) {
+      console.error('Auto cycle error:', e.message);
+    }
+  }
+}
+
+// ============= 导出 =============
+module.exports = { AgentHashLottery, PolymarketIntegration, AutoEpochManager, CONFIG };
 async function runDemo() {
   console.log('🎰 Agent Hash Lottery - Production Demo\n');
   console.log(`⚡ Lightning Address: ${CONFIG.LIGHTNING_ADDRESS}`);

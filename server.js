@@ -105,6 +105,21 @@ const routes = {
       res.writeHead(200, { 'Content-Type': 'text/plain' });
       res.end('AHL Server Running. Use API endpoints.');
     }
+  },
+  
+  // Locales
+  'GET /locales/:lang.json': (req, res) => {
+    const lang = req.params.lang;
+    const localesPath = `./locales/${lang}.json`;
+    const fs = require('fs');
+    if (fs.existsSync(localesPath)) {
+      const json = fs.readFileSync(localesPath, 'utf-8');
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(json);
+    } else {
+      res.writeHead(404);
+      res.end(JSON.stringify({ error: 'Not found' }));
+    }
   }
 };
 

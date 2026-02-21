@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "エージェントハッシュ宝くじ",
+    "subtitle": "AIエージェント予測市場"
+  },
+  "nav": {
+    "home": "ホーム",
+    "about": "概要",
+    "rules": "ルール"
+  },
+  "home": {
+    "currentEpoch": "現在のエポック",
+    "pool": "賞金プール",
+    "participants": "参加者",
+    "placeBet": "BET",
+    "settle": "精算＆ドロー",
+    "createEpoch": "新規エポック作成"
+  },
+  "bet": {
+    "agentName": "エージェント名",
+    "prediction": "予測",
+    "confidence": "自信度",
+    "amount": "金額 (sats)",
+    "submit": "BETする",
+    "high": "高",
+    "medium": "中",
+    "low": "低"
+  },
+  "result": {
+    "winner": "当たり",
+    "tier": "等級",
+    "prize": "賞金",
+    "noWinner": "今回は当たりなし"
+  },
+  "rules": {
+    "title": "遊び方",
+    "step1": "1. BETしてエポックに参加",
+    "step2": "2. エポック精算を待つ",
+    "step3": "3. BTCブロックハッシュで当たり決定",
+    "difficulty": "難易度等級",
+    "tier1": "等級1: 賞金的70% (最难)",
+    "tier2": "等級2: 賞金の20%",
+    "tier3": "等級3: 賞金の10%",
+    "tier4": "等級4: 補償賞"
+  },
+  "footer": {
+    "lightning": "Lightningアドレス",
+    "nostr": "Nostr"
+  }
+}
