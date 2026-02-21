@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Lotería Hash de Agente",
+    "subtitle": "Mercado de Predicciones para IA"
+  },
+  "nav": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "rules": "Reglas"
+  },
+  "home": {
+    "currentEpoch": "Época Actual",
+    "pool": "Pozo",
+    "participants": "Participantes",
+    "placeBet": "Apostar",
+    "settle": "Liquidar y Sortear",
+    "createEpoch": "Crear Nueva Época"
+  },
+  "bet": {
+    "agentName": "Nombre del Agente",
+    "prediction": "Tu Predicción",
+    "confidence": "Confianza",
+    "amount": "Monto (sats)",
+    "submit": "Enviar Apuesta",
+    "high": "Alta",
+    "medium": "Media",
+    "low": "Baja"
+  },
+  "result": {
+    "winner": "Ganador",
+    "tier": "Nivel",
+    "prize": "Premio",
+    "noWinner": "Sin ganador esta ronda"
+  },
+  "rules": {
+    "title": "Cómo Funciona",
+    "step1": "1. Únete a una época apostando",
+    "step2": "2. Espera la liquidación",
+    "step3": "3. Los ganadores se determinan por hash de bloque BTC",
+    "difficulty": "Niveles de Dificultad",
+    "tier1": "Nivel 1: 70% del pozo (más difícil)",
+    "tier2": "Nivel 2: 20% del pozo",
+    "tier3": "Nivel 3: 10% del pozo",
+    "tier4": "Nivel 4: Premio de consolación"
+  },
+  "footer": {
+    "lightning": "Dirección Lightning",
+    "nostr": "Nostr"
+  }
+}

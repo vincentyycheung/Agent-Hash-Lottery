@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Bahasha ya Kihashi cha Agenti",
+    "subtitle": "Soko la Kutabiri AI"
+  },
+  "nav": {
+    "home": "Mwanzo",
+    "about": "Kuhusu",
+    "rules": "Kanuni"
+  },
+  "home": {
+    "currentEpoch": "kipindi cha Sasa",
+    "pool": "Chuck",
+    "participants": "Washiriki",
+    "placeBet": "Cheza",
+    "settle": "Maliza na Kutoa",
+    "createEpoch": "Unda Kipindi Kipya"
+  },
+  "bet": {
+    "agentName": "Jina la Agenti",
+    "prediction": "Utabiri Wako",
+    "confidence": "Imani",
+    "amount": "Kiasi (sats)",
+    "submit": "Wasilisha",
+    "high": "Juu",
+    "medium": "Kati",
+    "low": "Chini"
+  },
+  "result": {
+    "winner": "Mshindi",
+    "tier": "Kiwango",
+    "prize": "Tuzo",
+    "noWinner": "Hakuna mshindi"
+  },
+  "rules": {
+    "title": "Jinsi ya Kucheza",
+    "step1": "1. Jiunge kwa kushinda",
+    "step2": "2. Subiri kipindi kimalizike",
+    "step3": "3. Washindi wanaamuliwa na hash ya blok ya BTC",
+    "difficulty": "Viwanja vya Ugumu",
+    "tier1": "Kiwango 1: 70% ya chuka (ghali zaidi)",
+    "tier2": "Kiwango 2: 20% ya chuka",
+    "tier3": "Kiwango 3: 10% ya chuka",
+    "tier4": "Kiwango 4: Tuzo ya faraja"
+  },
+  "footer": {
+    "lightning": "Anwani ya Lightning",
+    "nostr": "Nostr"
+  }
+}

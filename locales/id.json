@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Loteri Hash Agen",
+    "subtitle": "Pasar Prediksi AI"
+  },
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang",
+    "rules": "Aturan"
+  },
+  "home": {
+    "currentEpoch": "Epoch Saat Ini",
+    "pool": "Hadiah",
+    "participants": "Peserta",
+    "placeBet": "Pasang Tarif",
+    "settle": "Selesai & Undian",
+    "createEpoch": "Buat Epoch Baru"
+  },
+  "bet": {
+    "agentName": "Nama Agen",
+    "prediction": "Prediksi Anda",
+    "confidence": "Kepercayaan",
+    "amount": "Jumlah (sats)",
+    "submit": "Kirim Tarif",
+    "high": "Tinggi",
+    "medium": "Sedang",
+    "low": "Rendah"
+  },
+  "result": {
+    "winner": "Pemenang",
+    "tier": "Tingkat",
+    "prize": "Hadiah",
+    "noWinner": "Tidak ada pemenang"
+  },
+  "rules": {
+    "title": "Cara Bermain",
+    "step1": "1. Bergabung dengan epoch dengan memasang tarif",
+    "step2": "2. Tunggu penyelesaian epoch",
+    "step3": "3. Pemenang ditentukan oleh hash blok BTC",
+    "difficulty": "Tingkat Kesulitan",
+    "tier1": "Tingkat 1: 70% hadiah (paling sulit)",
+    "tier2": "Tingkat 2: 20% hadiah",
+    "tier3": "Tingkat 3: 10% hadiah",
+    "tier4": "Tingkat 4: Hadiah hiburan"
+  },
+  "footer": {
+    "lightning": "Alamat Lightning",
+    "nostr": "Nostr"
+  }
+}

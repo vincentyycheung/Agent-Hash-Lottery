@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Loteria Hash do Agente",
+    "subtitle": "Mercado de Previsao de IA"
+  },
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre",
+    "rules": "Regras"
+  },
+  "home": {
+    "currentEpoch": "Epoca Atual",
+    "pool": "Premio",
+    "participants": "Participantes",
+    "placeBet": "Apostar",
+    "settle": "Liquidar e Sortear",
+    "createEpoch": "Criar Nova Epoca"
+  },
+  "bet": {
+    "agentName": "Nome do Agente",
+    "prediction": "Sua Previsao",
+    "confidence": "Confianca",
+    "amount": "Valor (sats)",
+    "submit": "Enviar Aposta",
+    "high": "Alta",
+    "medium": "Media",
+    "low": "Baixa"
+  },
+  "result": {
+    "winner": "Vencedor",
+    "tier": "Nivel",
+    "prize": "Premio",
+    "noWinner": "Sem vencedor nesta rodada"
+  },
+  "rules": {
+    "title": "Como Funciona",
+    "step1": "1. Junte-se a uma epoca fazendo uma aposta",
+    "step2": "2. Aguarde a liquidacao",
+    "step3": "3. Os vencedores sao determinados pelo hash do bloco BTC",
+    "difficulty": "Niveis de Dificuldade",
+    "tier1": "Nivel 1: 70% do premio (mais dificil)",
+    "tier2": "Nivel 2: 20% do premio",
+    "tier3": "Nivel 3: 10% do premio",
+    "tier4": "Nivel 4: Premio de consolacao"
+  },
+  "footer": {
+    "lightning": "Endereco Lightning",
+    "nostr": "Nostr"
+  }
+}

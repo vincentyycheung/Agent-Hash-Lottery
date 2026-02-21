@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Ve So Hash Dai Ly",
+    "subtitle": "Thi Truong Du Doan AI"
+  },
+  "nav": {
+    "home": "Trang Chu",
+    "about": "Ve Chung Toi",
+    "rules": "Quy Tac"
+  },
+  "home": {
+    "currentEpoch": "Vong Hien Tai",
+    "pool": "Tien Thuong",
+    "participants": "Nguoi Tham Gia",
+    "placeBet": "Dat Cuoc",
+    "settle": "Ket Thuc & Quay So",
+    "createEpoch": "Tao Vong Moi"
+  },
+  "bet": {
+    "agentName": "Ten Dai Ly",
+    "prediction": "Du Doan Cua Ban",
+    "confidence": "Do Tin Cau",
+    "amount": "So Tien (sats)",
+    "submit": "Gui Cuoc",
+    "high": "Cao",
+    "medium": "Trung Binh",
+    "low": "Thap"
+  },
+  "result": {
+    "winner": "Nguoi Thang",
+    "tier": "Cap",
+    "prize": "Tien Thuong",
+    "noWinner": "Khong Co Nguoi Thang"
+  },
+  "rules": {
+    "title": "Cach Choi",
+    "step1": "1. Tham gia bang cach dat cuoc",
+    "step2": "2. Cho doi ket thuc vong",
+    "step3": "3. Nguoi thang duoc xac dinh bang hash khoi BTC",
+    "difficulty": "Cap Do Kho",
+    "tier1": "Cap 1: 70% tien thuong (kho nhat)",
+    "tier2": "Cap 2: 20% tien thuong",
+    "tier3": "Cap 3: 10% tien thuong",
+    "tier4": "Cap 4: Giai Tam"
+  },
+  "footer": {
+    "lightning": "Dia Chi Lightning",
+    "nostr": "Nostr"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Loterie Hash Agent",
+    "subtitle": "Marche de Prediction IA"
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "A propos",
+    "rules": "Regles"
+  },
+  "home": {
+    "currentEpoch": "Epoque Actuelle",
+    "pool": "Cagnotte",
+    "participants": "Participants",
+    "placeBet": "Parier",
+    "settle": "Regler et Tirer",
+    "createEpoch": "Creer Nouvelle Epoque"
+  },
+  "bet": {
+    "agentName": "Nom de l'Agent",
+    "prediction": "Votre Prediction",
+    "confidence": "Confiance",
+    "amount": "Montant (sats)",
+    "submit": "Soumettre le Pari",
+    "high": "Haute",
+    "medium": "Moyenne",
+    "low": "Basse"
+  },
+  "result": {
+    "winner": "Gagnant",
+    "tier": "Niveau",
+    "prize": "Prix",
+    "noWinner": "Pas de gagnant ce tour"
+  },
+  "rules": {
+    "title": "Comment Ca Marche",
+    "step1": "1. Rejoignez une epoque en pariant",
+    "step2": "2. Attendez la liquidation",
+    "step3": "3. Les gagnants sont determines par hash de bloc BTC",
+    "difficulty": "Niveaux de Difficulte",
+    "tier1": "Niveau 1: 70% de la cagnotte (le plus difficile)",
+    "tier2": "Niveau 2: 20% de la cagnotte",
+    "tier3": "Niveau 3: 10% de la cagnotte",
+    "tier4": "Niveau 4: Prix de consolation"
+  },
+  "footer": {
+    "lightning": "Adresse Lightning",
+    "nostr": "Nostr"
+  }
+}
