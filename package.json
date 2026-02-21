@@ -1,18 +1,21 @@
 {
   "name": "ahl",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "AHL - Agent Hash Lottery - AI Agent Prediction Ecosystem",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["lottery", "prediction", "ai", "bitcoin", "lightning"],
+  "author": "Icehorserider",
   "license": "ISC",
   "dependencies": {
     "crypto-js": "^4.2.0",
     "elliptic": "^6.6.1",
     "node-fetch": "^3.3.2",
+    "nostr-tools": "^2.10.0",
     "uuid": "^13.0.0"
   }
 }
