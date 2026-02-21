@@ -1,5 +1,5 @@
 /**
- * AHL Web Server
+ * AHL 3.0 Web Server
  * 
  * 运行: node server.js
  * 端口: 3000
@@ -7,12 +7,12 @@
 
 const http = require('http');
 const url = require('url');
-const { AgentHashLottery, CONFIG } = require('./index.js');
+const { AHL3, CONFIG } = require('./ahl-v3.js');
 
 const PORT = process.env.PORT || 3000;
 
 // 存储
-const ahl = new AgentHashLottery();
+const ahl = new AHL3();
 let currentEpoch = null;
 
 // 路由处理
@@ -32,24 +32,25 @@ const routes = {
   'POST /api/bet': async (req, res) => {
     try {
       const body = await parseBody(req);
-      const { agentName, agentNpub, prediction, confidence, amountSats } = body;
+      const { agentId, agentName, agentNpub, prediction, confidence, amountSats, referrerId } = body;
       
       if (!currentEpoch) {
         throw new Error('No active epoch');
       }
       
+      // 使用时间戳作为临时 agentId
+      const tempAgentId = agentId || `agent_${Date.now()}`;
+      
       const bet = ahl.placeBet(
         currentEpoch.id,
-        Date.now().toString(),
-        agentName,
+        tempAgentId,
+        agentName || 'Anonymous',
         agentNpub || '',
         prediction,
         confidence || 'medium',
-        parseInt(amountSats)
+        parseInt(amountSats) || 100,
+        referrerId
       );
-      
-      // Nostr 广播
-      await ahl.broadcastBet(currentEpoch, bet);
       
       json(res, { success: true, bet: formatBet(bet) });
     } catch (e) {
@@ -81,8 +82,7 @@ const routes = {
           winner: result.winner ? formatBet(result.winner) : null,
           tier: result.tier,
           prizeSats: result.prizeSats,
-          pool: result.pool,
-          hash: result.hash
+          pool: currentEpoch.totalSats,
         }
       });
       
@@ -93,32 +93,75 @@ const routes = {
     }
   },
   
+  // 排行榜
+  'GET /api/leaderboard': (req, res) => {
+    const leaderboard = ahl.getSeasonLeaderboard(10);
+    json(res, { success: true, leaderboard });
+  },
+  
+  // Agent 状态
+  'GET /api/agent/:id': (req, res) => {
+    const agentId = req.params.id;
+    const status = ahl.getAgentStatus(agentId);
+    if (status) {
+      json(res, { success: true, agent: status });
+    } else {
+      json(res, { success: false, error: 'Agent not found' }, 404);
+    }
+  },
+  
+  // 成为验证者
+  'POST /api/validator/become': async (req, res) => {
+    try {
+      const body = await parseBody(req);
+      const { agentId, stakeSats } = body;
+      
+      const result = ahl.becomeValidator(agentId, parseInt(stakeSats));
+      json(res, result);
+    } catch (e) {
+      json(res, { success: false, error: e.message }, 400);
+    }
+  },
+  
+  // 委托
+  'POST /api/delegate': async (req, res) => {
+    try {
+      const body = await parseBody(req);
+      const { agentId, toAgentId } = body;
+      
+      const result = ahl.delegate(agentId, toAgentId);
+      json(res, result);
+    } catch (e) {
+      json(res, { success: false, error: e.message }, 400);
+    }
+  },
+  
   // 静态文件
   'GET /': (req, res) => {
-    const indexPath = './web/index.html';
     const fs = require('fs');
+    const indexPath = './web/index.html';
     if (fs.existsSync(indexPath)) {
       const html = fs.readFileSync(indexPath, 'utf-8');
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       res.end(html);
     } else {
-      res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.end('AHL Server Running. Use API endpoints.');
+      res.writeHead(200);
+      res.end('AHL 3.0 Server Running');
     }
   },
   
   // Locales
   'GET /locales/:lang.json': (req, res) => {
     const lang = req.params.lang;
-    const localesPath = `./locales/${lang}.json`;
     const fs = require('fs');
+    const localesPath = `./locales/${lang}.json`;
     if (fs.existsSync(localesPath)) {
       const json = fs.readFileSync(localesPath, 'utf-8');
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(json);
     } else {
       res.writeHead(404);
-      res.end(JSON.stringify({ error: 'Not found' }));
+      res.end('Not found');
     }
   }
 };
@@ -135,9 +178,7 @@ function parseBody(req) {
     req.on('end', () => {
       try {
         resolve(body ? JSON.parse(body) : {});
-      } catch (e) {
-        reject(e);
-      }
+      } catch (e) { reject(e); }
     });
   });
 }
@@ -145,6 +186,7 @@ function parseBody(req) {
 function formatEpoch(epoch) {
   return {
     id: epoch.id,
+    topic: epoch.topic,
     btcBlockHash: epoch.btcBlockHash,
     startTime: epoch.startTime,
     status: epoch.status,
@@ -161,14 +203,14 @@ function formatBet(bet) {
     agentNpub: bet.agentNpub,
     prediction: bet.prediction,
     confidence: bet.confidence,
-    amountSats: bet.amountSats
+    amountSats: bet.amountSats,
+    weight: bet.weight
   };
 }
 
 // 服务器
 const server = http.createServer(async (req, res) => {
   const parsed = url.parse(req.url, true);
-  const path = `${req.method} ${parsed.pathname}`;
   
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -181,21 +223,15 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   
+  const path = `${req.method} ${parsed.pathname}`;
+  
   // 路由匹配
   for (const [route, handler] of Object.entries(routes)) {
     const [method, pathPattern] = route.split(' ');
-    if (req.method === method && parsed.pathname === pathPattern) {
-      await handler(req, res);
-      return;
-    }
-  }
-  
-  // API 前缀匹配
-  for (const [route, handler] of Object.entries(routes)) {
-    const [method, pathPattern] = route.split(' ');
     if (req.method === method) {
-      const regex = new RegExp('^' + pathPattern.replace(/:[^/]+/g, '[^/]+') + '$');
+      const regex = new RegExp('^' + pathPattern.replace(/:[^/]+/g, '([^/]+)') + '$');
       if (regex.test(parsed.pathname)) {
+        req.params = parsed.pathname.match(regex).slice(1);
         await handler(req, res);
         return;
       }
@@ -207,6 +243,6 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🎰 AHL Server running on http://localhost:${PORT}`);
+  console.log(`🎰 AHL 3.0 Server running on http://localhost:${PORT}`);
   console.log(`⚡ Lightning: ${CONFIG.LIGHTNING_ADDRESS}`);
 });
